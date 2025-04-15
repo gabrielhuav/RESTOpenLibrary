@@ -15,7 +15,7 @@ object ApiClient {
     private const val TAG = "ApiClient"
 
     // Cambiar a la URL de tu servidor backend Spring
-    private const val BACKEND_URL = "http://10.0.2.2:8080/" // Asume localhost (emulador Android)
+    private const val BACKEND_URL = "http://192.168.0.108:8080/" // Asume localhost (emulador Android)
     private const val OPEN_LIBRARY_URL = "https://openlibrary.org/"
 
     // Interceptor para añadir token de autenticación cuando sea necesario

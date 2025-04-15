@@ -9,8 +9,10 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import ovh.gabrielhuav.restopenlibrary.MainActivity
 import ovh.gabrielhuav.restopenlibrary.R
 import ovh.gabrielhuav.restopenlibrary.api.ApiClient
+import ovh.gabrielhuav.restopenlibrary.api.LoginCredentials
 import ovh.gabrielhuav.restopenlibrary.api.SessionManager
 import retrofit2.Call
 import retrofit2.Callback
@@ -68,7 +70,11 @@ class LoginActivity : AppCompatActivity() {
         progressBar.visibility = View.VISIBLE
         loginButton.isEnabled = false
 
-        val credentials = LoginCredentials(email, password)
+        // Importante: Utilizar la clase LoginCredentials del paquete api
+        val credentials = LoginCredentials(
+            correo = email,
+            password = password
+        )
 
         try {
             ApiClient.authService.login(credentials).enqueue(object : Callback<String> {
@@ -157,7 +163,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun startHomeActivity() {
-        val intent = Intent(this, HomeActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish() // Cerramos LoginActivity para que no se pueda volver atrás
     }

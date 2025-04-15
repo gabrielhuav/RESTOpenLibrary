@@ -1,6 +1,5 @@
 package ovh.gabrielhuav.restopenlibrary.api
 
-import ovh.gabrielhuav.restopenlibrary.activities.LoginCredentials
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST

@@ -60,7 +60,7 @@ class BookAdapter(private var books: List<Book> = emptyList()) :
             holder.coverImageView.setImageResource(R.drawable.book_placeholder)
         }
 
-        // Configuración del botón de favoritos según estado de login
+        // Configuration del botón de favoritos según estado de login
         if (SessionManager.isLoggedIn()) {
             holder.favoriteButton.visibility = View.VISIBLE
 
