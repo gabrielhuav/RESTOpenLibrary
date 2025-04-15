@@ -1,9 +1,6 @@
 package ovh.gabrielhuav.restopenlibrary
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
@@ -11,11 +8,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ovh.gabrielhuav.restopenlibrary.activities.FavoritesActivity
-import ovh.gabrielhuav.restopenlibrary.activities.LoginActivity
-import ovh.gabrielhuav.restopenlibrary.adapters.BookAdapter
+import ovh.gabrielhuav.restopenlibrary.services.SpringBackendService
 import ovh.gabrielhuav.restopenlibrary.api.ApiClient
-import ovh.gabrielhuav.restopenlibrary.api.SessionManager
 import ovh.gabrielhuav.restopenlibrary.models.SearchResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,19 +20,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var searchEditText: EditText
     private lateinit var searchButton: Button
     private lateinit var resultsRecyclerView: RecyclerView
-    private lateinit var bookAdapter: BookAdapter
+    private lateinit var bookAdapter: SpringBackendService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        // Verificar si el usuario está autenticado, si no, redirigir a LoginActivity
-        if (!SessionManager.isLoggedIn()) {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
-            return
-        }
 
         // Inicializar vistas
         searchEditText = findViewById(R.id.searchEditText)
@@ -46,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         resultsRecyclerView = findViewById(R.id.resultsRecyclerView)
 
         // Configurar RecyclerView
-        bookAdapter = BookAdapter()
+        bookAdapter = SpringBackendService()
         resultsRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = bookAdapter
@@ -61,34 +47,6 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Por favor ingresa un término de búsqueda", Toast.LENGTH_SHORT).show()
             }
-        }
-
-        // Mostrar mensaje de bienvenida
-        Toast.makeText(this, "Bienvenido ${SessionManager.getUsername()}", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_favorites -> {
-                // Abrir la actividad de favoritos
-                val intent = Intent(this, FavoritesActivity::class.java)
-                startActivity(intent)
-                true
-            }
-            R.id.action_logout -> {
-                // Cerrar sesión
-                SessionManager.logout()
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-                finish()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
         }
     }
 

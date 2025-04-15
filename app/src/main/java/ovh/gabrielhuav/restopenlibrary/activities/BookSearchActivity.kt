@@ -1,8 +1,6 @@
-package ovh.gabrielhuav.restopenlibrary
+package ovh.gabrielhuav.restopenlibrary.activities
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -11,17 +9,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ovh.gabrielhuav.restopenlibrary.activities.FavoritesActivity
-import ovh.gabrielhuav.restopenlibrary.activities.LoginActivity
+import ovh.gabrielhuav.restopenlibrary.R
 import ovh.gabrielhuav.restopenlibrary.adapters.BookAdapter
 import ovh.gabrielhuav.restopenlibrary.api.ApiClient
-import ovh.gabrielhuav.restopenlibrary.api.SessionManager
 import ovh.gabrielhuav.restopenlibrary.models.SearchResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainActivity : AppCompatActivity() {
+class BookSearchActivity : AppCompatActivity() {
 
     private lateinit var searchEditText: EditText
     private lateinit var searchButton: Button
@@ -30,15 +26,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_book_search)
 
-        // Verificar si el usuario está autenticado, si no, redirigir a LoginActivity
-        if (!SessionManager.isLoggedIn()) {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
-            return
-        }
+        // Mostrar botón de volver en ActionBar
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "Búsqueda de libros"
 
         // Inicializar vistas
         searchEditText = findViewById(R.id.searchEditText)
@@ -48,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         // Configurar RecyclerView
         bookAdapter = BookAdapter()
         resultsRecyclerView.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
+            layoutManager = LinearLayoutManager(this@BookSearchActivity)
             adapter = bookAdapter
         }
 
@@ -61,34 +53,6 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Por favor ingresa un término de búsqueda", Toast.LENGTH_SHORT).show()
             }
-        }
-
-        // Mostrar mensaje de bienvenida
-        Toast.makeText(this, "Bienvenido ${SessionManager.getUsername()}", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_favorites -> {
-                // Abrir la actividad de favoritos
-                val intent = Intent(this, FavoritesActivity::class.java)
-                startActivity(intent)
-                true
-            }
-            R.id.action_logout -> {
-                // Cerrar sesión
-                SessionManager.logout()
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-                finish()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -104,15 +68,15 @@ class MainActivity : AppCompatActivity() {
                     bookAdapter.updateBooks(books)
 
                     if (books.isEmpty()) {
-                        Toast.makeText(this@MainActivity, "No se encontraron resultados", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@BookSearchActivity, "No se encontraron resultados", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(this@MainActivity, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@BookSearchActivity, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@BookSearchActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -120,5 +84,14 @@ class MainActivity : AppCompatActivity() {
     private fun hideKeyboard() {
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(searchEditText.windowToken, 0)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            // Manejar el botón de regreso en la barra de acción
+            onBackPressed()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

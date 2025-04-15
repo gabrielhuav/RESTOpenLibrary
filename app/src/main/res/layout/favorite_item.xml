@@ -14,7 +14,7 @@
         android:padding="8dp">
 
         <ImageView
-            android:id="@+id/bookCover"
+            android:id="@+id/favoriteCover"
             android:layout_width="80dp"
             android:layout_height="120dp"
             android:scaleType="centerCrop"
@@ -27,7 +27,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/bookTitle"
+                android:id="@+id/favoriteTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
@@ -36,7 +36,7 @@
                 android:ellipsize="end" />
 
             <TextView
-                android:id="@+id/bookAuthor"
+                android:id="@+id/favoriteAuthor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -45,20 +45,22 @@
                 android:ellipsize="end" />
 
             <TextView
-                android:id="@+id/bookYear"
+                android:id="@+id/favoriteDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:textSize="14sp" />
+                android:textSize="12sp"
+                android:textColor="#666666" />
 
             <Button
-                android:id="@+id/favoriteButton"
+                android:id="@+id/removeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Añadir a favoritos"
+                android:text="Eliminar de favoritos"
                 android:textSize="12sp"
-                android:padding="4dp" />
+                android:padding="4dp"
+                android:backgroundTint="#F44336" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
